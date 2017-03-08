@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Simple example and test</title>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+<body>
+  <div class="container">
+    <div class="header clearfix">
+      <h3 class="text-muted">Tabling</h3>
+    </div>
+
+    <div class="row">
+
+      <div id="table-1" class="panel panel-default panel-table">
+
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col col-xs-8">
+              <form class="form-inline">
+                <div class="form-group">
+                  <input type="text" class="form-control" placeholder="handle: all events" handle-event/>
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control" placeholder="handle: click,keyup event(s)" handle-event="click,keyup"/>
+                </div>
+              </form>
+            </div>
+            <div class="col col-xs-4 text-right">
+              <button type="button" class="btn btn-sm btn-primary btn-create">Create New</button>
+            </div>
+          </div>
+        </div>
+
+        <table class="table table-striped table-bordered table-list">
+          <thead>
+            <tr>
+              <th column-id="id" sortable>Id</th>
+              <th column-id="name" sortable>Name</th>
+              <th column-id="email" sortable>Email</th>
+              <th column-id="actions">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr line>
+              <td column-id="id"></td>
+              <td column-id="name"></td>
+              <td column-id="email"></td>
+              <td column-id="actions">
+                <a href="edit.php/%id%">edit</a>
+                <a href="delete.php/%id%">delete</a>
+                <a href="view.php/%id%">view</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="panel-footer">
+          <div class="row">
+            <div class="col col-xs-4">Page <span id="currentPage"></span> of <span id="totalPages"></span></div>
+            <div class="col col-xs-8">
+              <ul class="pagination hidden-xs pull-right">
+                <li first-page><a href="#"><<</a></li>
+                <li prev-page><a href="#"><</a></li>
+                <li page><a href="#">%page%</a></li>
+                <li next-page><a href="#">></a></li>
+                <li last-page><a href="#">>></a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script src="../src/tabling.js"></script>
+
+  <script>
+    var data = {
+      page: 1,
+      perPage: 5,
+    };
+
+    var table = tabling({
+      elementId : 'table-1',
+      endingpointUrl : 'data.php'
+    });
+
+    table.on('keyup', function (el, e) {
+      data.search = el.value;
+      table.request();
+    });
+
+    table.setPrepareDataFilter(function () {
+      return data;
+    });
+
+    table.setRequestHandler(function (response) {
+      table.flush();
+      table.addLines(response.data);
+      table.setPagination(response.meta.pagination);
+
+      document.getElementById("currentPage").innerHTML = response.meta.pagination.currentPage;
+      document.getElementById("totalPages").innerHTML = response.meta.pagination.totalPages;
+    });
+
+    table.setPaginationHandler(function (page) {
+      data.page = page;
+      table.request();
+    });
+
+    table.setSortingHandler(function (sort) {
+      console.log(sort);
+    });
+
+    table.init();
+  </script>
+</body>
+</html>
