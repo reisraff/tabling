@@ -106,7 +106,7 @@ var tabling = function (obj) {
 
   _self.addLines = function (arr) {
     for (var i = 0; i < arr.length; i++) {
-      table.addLine(arr[i]);
+      _self.table.addLine(arr[i]);
     }
   };
 
