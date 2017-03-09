@@ -37,13 +37,6 @@ var tabling = function (obj) {
   _self.sortingHandler = function (sort) {
   };
 
-  _self.table = document.getElementById(_self.elementId);
-  if (! _self.table) {
-    throw new Error('Does not exists element with this ID.');
-  }
-  _self.line = self.table.querySelector('*[line]'); // should be a TR
-  _self.lineParent = _self.line.parentNode;
-
   _self.flush = function () {
     _self.lineParent.innerHTML = '';
   };
@@ -106,7 +99,7 @@ var tabling = function (obj) {
 
   _self.addLines = function (arr) {
     for (var i = 0; i < arr.length; i++) {
-      _self.table.addLine(arr[i]);
+      _self.addLine(arr[i]);
     }
   };
 
@@ -118,7 +111,7 @@ var tabling = function (obj) {
   };
 
   _self.updatePagination = function () {
-    var lasts = _self.pageParent.querySelectorAll('*[dinamic-page]');
+    var lasts = _self.page.parentNode.querySelectorAll('*[dinamic-page]');
     for (var i = lasts.length - 1; i >= 0; i--) {
       lasts[i].remove();
     }
@@ -136,13 +129,13 @@ var tabling = function (obj) {
     }
 
     if (_self.paginator.firstLast) {
-      var first = _self.pageParent.querySelector('*[first-page]');
+      var first = _self.page.parentNode.querySelector('*[first-page]');
       if (_self.pagination.currentPage == 1) {
         first.classList.add(_self.paginator.classWhenDisabled);
       } else {
         first.classList.remove(_self.paginator.classWhenDisabled);
       }
-      var last = _self.pageParent.querySelector('*[last-page]');
+      var last = _self.page.parentNode.querySelector('*[last-page]');
       if (_self.pagination.currentPage == _self.pagination.totalPages) {
         last.classList.add(_self.paginator.classWhenDisabled);
       } else {
@@ -151,13 +144,13 @@ var tabling = function (obj) {
     }
 
     if (_self.paginator.prevNext) {
-      var prev = _self.pageParent.querySelector('*[prev-page]');
+      var prev = _self.page.parentNode.querySelector('*[prev-page]');
       if (_self.pagination.currentPage - 1 < 1) {
         prev.classList.add(_self.paginator.classWhenDisabled);
       } else {
         prev.classList.remove(_self.paginator.classWhenDisabled);
       }
-      var next = _self.pageParent.querySelector('*[next-page]');
+      var next = _self.page.parentNode.querySelector('*[next-page]');
       if (_self.pagination.currentPage + 1 > _self.pagination.totalPages) {
         next.classList.add(_self.paginator.classWhenDisabled);
       } else {
@@ -180,7 +173,7 @@ var tabling = function (obj) {
           var dinamicPage = i;
           page.addEventListener('click', function () {_self.paginate(dinamicPage)});
         }
-        _self.pageParent.insertBefore(page, _self.page);
+        _self.page.parentNode.insertBefore(page, _self.page);
       })();
     }
   };
@@ -256,6 +249,13 @@ var tabling = function (obj) {
   };
 
   (function () {
+    _self.table = document.getElementById(_self.elementId);
+    if (! _self.table) {
+      throw new Error('Does not exists element with this ID.');
+    }
+    _self.line = _self.table.querySelector('*[line]'); // should be a TR
+    _self.lineParent = _self.line.parentNode;
+
     _self.flush();
     var elements = _self.table.querySelectorAll('*[handle-event]');
     for (var i = elements.length - 1; i >= 0; i--) {
@@ -298,7 +298,6 @@ var tabling = function (obj) {
     _self.page = _self.table.querySelector('*[page]');
     _self.pageClone = _self.page.cloneNode(true);
     _self.page.style.display = 'none';
-    _self.pageParent = _self.page.parentNode;
   })();
 
   return {
