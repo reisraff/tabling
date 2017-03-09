@@ -91,7 +91,7 @@
 
     var table = tabling({
       elementId : 'table-1',
-      endingpointUrl : 'data.php'
+      endingpointUrl : 'example/data.php'
     });
 
     table.on('keyup', function (el, e) {
@@ -99,11 +99,24 @@
       table.request();
     });
 
-    table.setPrepareDataFilter(function () {
-      return data;
+    table.setRequestHandler(function () {
+      return {
+        headers : [
+          {
+            header: 'Content-type',
+            value: 'application/json'
+          },
+          {
+            header: 'X-CSRF-TOKEN',
+            value: '6d5WOS8tHa7lW2Z5GUnY368XkPA7yabmNJkUC2yn'
+          }
+        ],
+        data: data
+      };
     });
 
-    table.setRequestHandler(function (response) {
+    table.setResponseHandler(function (response) {
+      response = JSON.parse(response);
       table.flush();
       table.addLines(response.data);
       table.setPagination(response.meta.pagination);

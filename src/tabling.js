@@ -24,11 +24,11 @@ var tabling = function (obj) {
 
   _self.listeners = [];
 
-  _self.prepareDataFilter = function () {
+  _self.requestHandler = function () {
     return {};
   };
 
-  _self.requestHandler = function (obj) {
+  _self.responseHandler = function (obj) {
   };
 
   _self.paginationHandler = function (page) {
@@ -60,15 +60,22 @@ var tabling = function (obj) {
     var myRequest = new XMLHttpRequest();
 
     myRequest.open('POST', _self.endingpointUrl, true);
-    myRequest.setRequestHeader('Content-type', 'application/json');
 
-    myRequest.onreadystatechange = function () {
-      if (myRequest.readyState == 4 && myRequest.status == 200) {
-        _self.requestHandler(JSON.parse(myRequest.responseText));
+    var request = _self.requestHandler();
+
+    if (request.headers != undefined && request.headers != null) {
+      for (var i = request.headers.length - 1; i >= 0; i--) {
+        myRequest.setRequestHeader(request.headers[i].header, request.headers[i].value);
       }
     }
 
-    myRequest.send(JSON.stringify(_self.prepareDataFilter()));
+    myRequest.onreadystatechange = function () {
+      if (myRequest.readyState == 4 && myRequest.status == 200) {
+        _self.responseHandler(myRequest.responseText);
+      }
+    }
+
+    myRequest.send(JSON.stringify(request.data));
   };
 
   _self.addLine = function (obj) {
@@ -307,14 +314,14 @@ var tabling = function (obj) {
     setPaginationHandler : function (fnc) {
       _self.paginationHandler = fnc;
     },
-    setRequestHandler : function (fnc) {
-      _self.requestHandler = fnc;
+    setResponseHandler : function (fnc) {
+      _self.responseHandler = fnc;
     },
     setSortingHandler : function (fnc) {
       _self.sortingHandler = fnc;
     },
-    setPrepareDataFilter : function (fnc) {
-      _self.prepareDataFilter = fnc;
+    setRequestHandler : function (fnc) {
+      _self.requestHandler = fnc;
     },
     init: function () {
       _self.request();
