@@ -1,5 +1,5 @@
 {
   "name": "tabling",
   "version": "0.0.0",
-  "main": "tabling.min.js"
+  "main": "dist/tabling.min.js"
 }
