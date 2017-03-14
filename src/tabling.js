@@ -6,6 +6,7 @@ var tabling = function (obj) {
 
   _self.elementId = obj.elementId || '';
   _self.endingpointUrl = obj.endingpointUrl || '';
+  _self.columns = [];
   _self.paginator = obj.paginator || {};
   _self.paginator.numberOfPages = _self.paginator.numberOfPages || 5;
   _self.paginator.firstLast = _self.paginator.firstLast || true;
@@ -93,6 +94,13 @@ var tabling = function (obj) {
         }
       }
     }
+
+    _self.columns.map(function (value) {
+      var e = newLine.querySelector('*[column-id=' + value + ']');
+      if (e !== undefined && e !== null) {
+        e.style.display = 'none';
+      }
+    });
 
     _self.lineParent.append(newLine);
   };
@@ -248,6 +256,26 @@ var tabling = function (obj) {
     _self.sortingHandler(_self.dataSort);
   };
 
+  _self.hideColumn = function(columnID) {
+    var columns = _self.table.querySelectorAll('*[column-id=' + columnID + ']');
+    for (var i = columns.length - 1; i >= 0; i--) {
+      columns[i].style.display = 'none';
+    }
+
+    _self.columns.push(columnID);
+  };
+
+  _self.showColumn = function(columnID) {
+    var columns = _self.table.querySelectorAll('*[column-id=' + columnID + ']');
+    for (var i = columns.length - 1; i >= 0; i--) {
+      columns[i].style.display = '';
+    }
+
+    _self.columns = _self.columns.filter(function(value) {
+      return value !== columnID;
+    });
+  };
+
   (function () {
     _self.table = document.getElementById(_self.elementId);
     if (! _self.table) {
@@ -306,6 +334,8 @@ var tabling = function (obj) {
     addLine : _self.addLine,
     addLines : _self.addLines,
     request : _self.request,
+    hideColumn: _self.hideColumn,
+    showColumn: _self.showColumn,
     setPagination : function (pagination) {
       _self.pagination = pagination;
       _self.updatePagination();
