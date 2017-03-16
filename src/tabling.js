@@ -24,6 +24,7 @@ var tabling = function (obj) {
   _self.dataSort = [];
 
   _self.listeners = [];
+  _self.formaters = [];
 
   _self.requestHandler = function () {
     return {};
@@ -78,7 +79,17 @@ var tabling = function (obj) {
     Object.keys(obj).map(function (key) {
       var col = newLine.querySelector('*[column-id=' + key + ']');
       if (col !== null) {
-        col.innerHTML = obj[key];
+        if (col.innerHTML.match(/%data%/)) {
+          col.innerHTML = col.innerHTML.replace(/%data%/, obj[key].trim());
+        } else if (col.getAttribute('formater') != null && col.getAttribute('formater') != undefined) {
+          for (var i = _self.formaters.length - 1; i >= 0; i--) {
+            if (_self.formaters[i].f == col.getAttribute('formater')) {
+              col.innerHTML = _self.formaters[i].c(obj[key]);
+            }
+          }
+        } else {
+          col.innerHTML = obj[key];
+        }
       }
     });
 
@@ -116,6 +127,13 @@ var tabling = function (obj) {
       throw new Error('It is not a funcitons');
     }
     _self.listeners.push({e: event, c: clousure});
+  };
+
+  _self.addFormater = function (formaterName, clousure) {
+    if (typeof clousure !== 'function') {
+      throw new Error('It is not a funcitons');
+    }
+    _self.formaters.push({f: formaterName, c: clousure});
   };
 
   _self.updatePagination = function () {
@@ -330,6 +348,7 @@ var tabling = function (obj) {
 
   return {
     on : _self.on,
+    addFormater: _self.addFormater,
     flush : _self.flush,
     addLine : _self.addLine,
     addLines : _self.addLines,
