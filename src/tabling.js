@@ -24,7 +24,7 @@ var tabling = function (obj) {
   _self.dataSort = [];
 
   _self.listeners = [];
-  _self.formaters = [];
+  _self.formatters = [];
 
   _self.requestHandler = function () {
     return {};
@@ -81,10 +81,10 @@ var tabling = function (obj) {
       if (col !== null) {
         if (col.innerHTML.match(/%data%/)) {
           col.innerHTML = col.innerHTML.replace(/%data%/, obj[key].trim());
-        } else if (col.getAttribute('formater') != null && col.getAttribute('formater') != undefined) {
-          for (var i = _self.formaters.length - 1; i >= 0; i--) {
-            if (_self.formaters[i].f == col.getAttribute('formater')) {
-              col.innerHTML = _self.formaters[i].c(obj[key]);
+        } else if (col.getAttribute('formatter') != null && col.getAttribute('formatter') != undefined) {
+          for (var i = _self.formatters.length - 1; i >= 0; i--) {
+            if (_self.formatters[i].f == col.getAttribute('formatter')) {
+              col.innerHTML = _self.formatters[i].c(obj[key]);
             }
           }
         } else {
@@ -129,11 +129,11 @@ var tabling = function (obj) {
     _self.listeners.push({e: event, c: clousure});
   };
 
-  _self.addFormater = function (formaterName, clousure) {
+  _self.addFormatter = function (formatterName, clousure) {
     if (typeof clousure !== 'function') {
       throw new Error('It is not a funcitons');
     }
-    _self.formaters.push({f: formaterName, c: clousure});
+    _self.formatters.push({f: formatterName, c: clousure});
   };
 
   _self.updatePagination = function () {
@@ -348,7 +348,7 @@ var tabling = function (obj) {
 
   return {
     on : _self.on,
-    addFormater: _self.addFormater,
+    addFormatter: _self.addFormatter,
     flush : _self.flush,
     addLine : _self.addLine,
     addLines : _self.addLines,
