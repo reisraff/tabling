@@ -113,7 +113,7 @@ var tabling = function (obj) {
       }
     });
 
-    _self.lineParent.append(newLine);
+    _self.lineParent.appendChild(newLine);
   };
 
   _self.addLines = function (arr) {
@@ -381,6 +381,5 @@ var tabling = function (obj) {
   var css = document.createElement('style');
   css.innerHTML = '.tabling-sort-none::{content: "";}.tabling-sort-asc::after{content:" \\2193"}.tabling-sort-desc::after{content:" \\2191"}';
 
-  var cs = document.currentScript;
-  cs.parentNode.insertBefore(css, cs);
+  document.body.appendChild(css);
 })();
