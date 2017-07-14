@@ -243,24 +243,24 @@ var tabling = function (obj) {
       });
 
       if (id == null) {
-        _self.dataSort.push({column: col, direction: 'asc'});
+        _self.dataSort.push({column: col, direction: 'desc'});
         id = _self.dataSort.length - 1;
       }
 
       if (sortDirection == '' || sortDirection == null) {
-        el.setAttribute('sort-direction', 'asc');
-        el.classList.remove(_self.sorting.noneClass);
-        el.classList.remove(_self.sorting.descClass);
-
-        el.classList.add(_self.sorting.ascClass);
-        _self.dataSort[id].direction = 'asc';
-      } else if (sortDirection == 'asc') {
         el.setAttribute('sort-direction', 'desc');
         el.classList.remove(_self.sorting.noneClass);
         el.classList.remove(_self.sorting.ascClass);
 
         el.classList.add(_self.sorting.descClass);
         _self.dataSort[id].direction = 'desc';
+      } else if (sortDirection == 'desc') {
+        el.setAttribute('sort-direction', 'asc');
+        el.classList.remove(_self.sorting.noneClass);
+        el.classList.remove(_self.sorting.descClass);
+
+        el.classList.add(_self.sorting.ascClass);
+        _self.dataSort[id].direction = 'asc';
       } else {
         el.setAttribute('sort-direction', '');
         el.classList.remove(_self.sorting.descClass);
