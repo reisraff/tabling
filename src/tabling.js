@@ -21,7 +21,7 @@ var tabling = function (obj) {
   _self.sorting.ascClass = _self.sorting.ascClass || 'tabling-sort-asc';
   _self.sorting.descClass = _self.sorting.descClass || 'tabling-sort-desc';
   _self.sorting.noneClass = _self.sorting.noneClass || 'tabling-sort-none';
-  _self.dataSort = [];
+  _self.dataSort = obj.dataSort || [];
 
   _self.listeners = [];
   _self.formatters = [];
@@ -323,7 +323,22 @@ var tabling = function (obj) {
     var elements = _self.table.querySelectorAll('*[sortable]');
     for (var i = elements.length - 1; i >= 0; i--) {
       var element = elements[i];
-      element.classList.add(_self.sorting.noneClass);
+      var colId = element.getAttribute('column-id');
+
+      for (var j = _self.dataSort.length - 1; j >= 0; j--) {
+        if (_self.dataSort[j].column == colId) {
+          if (_self.dataSort[j].direction == 'desc') {
+            element.classList.add(_self.sorting.descClass);
+            element.setAttribute('sort-direction', 'desc');
+          } else {
+            element.classList.add(_self.sorting.ascClass);
+            element.setAttribute('sort-direction', 'asc');
+          }
+        } else {
+          element.classList.add(_self.sorting.noneClass);
+        }
+      }
+
       element.addEventListener('click', function (e) {_self.doSort(e.target);});
     }
 
