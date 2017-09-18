@@ -149,6 +149,7 @@ var tabling = function (obj) {
     if (_self.pagination.currentPage > center) {
       if (_self.pagination.currentPage - afterCenter + _self.paginator.numberOfPages - 1 > _self.pagination.totalPages) {
         start = _self.pagination.totalPages - _self.paginator.numberOfPages + 1;
+        start = start < 1 ? 1 : start;
       } else {
         start = _self.pagination.currentPage - afterCenter;
       }
