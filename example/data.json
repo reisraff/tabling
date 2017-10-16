@@ -1,9 +1,5 @@
-<?php
-
-$data = json_decode(file_get_contents('php://input'), true);
-
-$json = <<<JSON
-[
+{
+  "data" : [
     {
         "id" : 1,
         "name": "AdMotion Shop",
@@ -53,39 +49,12 @@ $json = <<<JSON
         "id" : 10,
         "name": "Teteu Miranda",
         "email": "Teteu@gmail.com"
-    },
-    {
-        "id" : 11,
-        "name": "Joana Dark",
-        "email": "Joana@gmail.com"
-    },
-    {
-        "id" : 12,
-        "name": "Gasparzinho",
-        "email": "Gasparzinho@gmail.com"
     }
-]
-JSON;
-
-$json = json_decode($json, true);
-
-$page = $data['page'] - 1;
-$perPage = $data['perPage'];
-
-$return = [];
-
-for ($i = ($page * $perPage); $i < (($page * $perPage) + $perPage); $i++) {
-  if ($json[$i]) {
-    $return[] = $json[$i];
+  ],
+  "meta" : {
+    "pagination" : {
+      "currentPage" : 10,
+      "totalPages" : 1
+    }
   }
 }
-
-echo json_encode([
-  'data' => $return,
-  'meta' => [
-    'pagination' => [
-      'currentPage' => $data['page'],
-      'totalPages' => ceil(count($json) / $perPage),
-    ]
-  ]
-]);
