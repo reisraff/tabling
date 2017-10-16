@@ -2,7 +2,7 @@
 
 The tool to generate a pagination with a pure js, no jQuery required.
 
-## Usage
+## Simple Usage
 
 HTML file
 
@@ -100,3 +100,7 @@ HTML file
   table.init();
 </script>
 ```
+
+## Full Doc
+
+[DOC.md](https://github.com/vixtech/tabling/blob/master/DOC.md)
