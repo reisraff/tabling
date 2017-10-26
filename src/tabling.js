@@ -395,7 +395,7 @@ var tabling = function (obj) {
 
 (function () {
   var css = document.createElement('style');
-  css.innerHTML = '.tabling-sort-none::{content: "";}.tabling-sort-asc::after{content:" \\2193"}.tabling-sort-desc::after{content:" \\2191"}';
+  css.innerHTML = '.tabling-sort-none::{content: "";}.tabling-sort-asc::after{content:" \\25B4"}.tabling-sort-desc::after{content:" \\25BE"}';
 
   document.body.appendChild(css);
 })();
