@@ -9,8 +9,9 @@ var tabling = function (obj) {
   _self.columns = [];
   _self.paginator = obj.paginator || {};
   _self.paginator.numberOfPages = _self.paginator.numberOfPages || 5;
-  _self.paginator.firstLast = _self.paginator.firstLast || true;
-  _self.paginator.prevNext = _self.paginator.prevNext || true;
+  _self.paginator.page = _self.paginator.page !== undefined ? _self.paginator.page : true;
+  _self.paginator.firstLast = _self.paginator.firstLast !== undefined ? _self.paginator.firstLast : true;
+  _self.paginator.prevNext = _self.paginator.prevNext !== undefined ? _self.paginator.prevNext : true;
   _self.paginator.classWhenActive = _self.paginator.classWhenActived || 'active';
   _self.paginator.classWhenDisabled = _self.paginator.classWhenDisabled || 'disabled';
   _self.pagination = {
@@ -357,9 +358,11 @@ var tabling = function (obj) {
       next.addEventListener('click', function () {_self.paginate('next')});
     }
 
-    _self.page = _self.table.querySelector('*[page]');
-    _self.pageClone = _self.page.cloneNode(true);
-    _self.page.style.display = 'none';
+    if (_self.paginator.page) {
+      _self.page = _self.table.querySelector('*[page]');
+      _self.pageClone = _self.page.cloneNode(true);
+      _self.page.style.display = 'none';
+    }
   })();
 
   return {
