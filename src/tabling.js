@@ -81,7 +81,7 @@ var tabling = function (obj) {
       var col = newLine.querySelector('*[column-id=' + key + ']');
       if (col !== null) {
         if (col.innerHTML.match(/%data%/)) {
-          col.innerHTML = col.innerHTML.replace(/%data%/, obj[key].trim());
+          col.innerHTML = col.innerHTML.replace(/%data%/, obj[key]);
         } else if (col.getAttribute('formatter') != null && col.getAttribute('formatter') != undefined) {
           for (var i = _self.formatters.length - 1; i >= 0; i--) {
             if (_self.formatters[i].f == col.getAttribute('formatter')) {
