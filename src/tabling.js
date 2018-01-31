@@ -19,6 +19,7 @@ var tabling = function (obj) {
     totalPages: 0
   };
   _self.sorting =  obj.sorting || {};
+  _self.sorting.singleSort = _self.sorting.singleSort || false;
   _self.sorting.ascClass = _self.sorting.ascClass || 'tabling-sort-asc';
   _self.sorting.descClass = _self.sorting.descClass || 'tabling-sort-desc';
   _self.sorting.noneClass = _self.sorting.noneClass || 'tabling-sort-none';
@@ -237,16 +238,28 @@ var tabling = function (obj) {
     var col = el.getAttribute('column-id');
 
     if (col != null && col != '') {
-      var id = null;
-      Object.keys(_self.dataSort).map(function (key) {
-        if (_self.dataSort[key].column == col) {
-          id = key;
+      if (_self.sorting.singleSort) {
+        var columns = _self.table.querySelectorAll('*[sortable]');
+        for (var i = columns.length - 1; i >= 0; i--) {
+          columns[i].classList.remove(_self.sorting.descClass);
+          columns[i].classList.remove(_self.sorting.ascClass);
+          columns[i].classList.add(_self.sorting.noneClass);
         }
-      });
 
-      if (id == null) {
-        _self.dataSort.push({column: col, direction: 'desc'});
-        id = _self.dataSort.length - 1;
+        _self.dataSort = [{column: col, direction: 'desc'}];
+        var id = 0;
+      } else {
+        var id = null;
+        Object.keys(_self.dataSort).map(function (key) {
+          if (_self.dataSort[key].column == col) {
+            id = key;
+          }
+        });
+
+        if (id == null) {
+          _self.dataSort.push({column: col, direction: 'desc'});
+          id = _self.dataSort.length - 1;
+        }
       }
 
       if (sortDirection == '' || sortDirection == null) {
